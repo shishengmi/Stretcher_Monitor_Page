@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "run dev": "npm run dev"
   },
   "dependencies": {
     "postcss-px-to-viewport": "^1.1.1",

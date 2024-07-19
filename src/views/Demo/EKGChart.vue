@@ -50,22 +50,34 @@ function drawGrid(ctx: CanvasRenderingContext2D) {
 
 let offset = 2
 function drawEKGPoint(
-  ctx: CanvasRenderingContext2D,
-  num: number,
-  pointSpace = 2,
-  refreshBlockWidth = 20
+    ctx: CanvasRenderingContext2D,
+    num: number,
+    pointSpace = 2,
+    refreshBlockWidth = 20,
+    minValue = -1,
+    maxValue = 2
 ) {
-  const maxOffset = canvasWidth.value / pointSpace
-  ctx.strokeStyle = '#3bff72'
-  ctx.lineWidth = 1
-  num = canvasHeight.value / 1.5 - num * 90
-  ctx.clearRect(offset * pointSpace, 0, refreshBlockWidth, canvasHeight.value)
-  offset++
-  ctx.lineTo(offset * pointSpace, num)
-  ctx.stroke()
+  const canvasRange = canvasHeight.value;
+  const maxOffset = canvasWidth.value / pointSpace;
+  ctx.strokeStyle = '#3bff72';
+  ctx.lineWidth = 1;
+
+  // 将num值从[minValue, maxValue]范围映射到[canvasHeight.value, 0]范围
+  const scaledNum = ((num - minValue) / (maxValue - minValue)) * canvasRange;
+
+  // Y坐标调整，使数值小的在画布下方，数值大的在画布上方
+  const yPos = canvasHeight.value - scaledNum;
+
+  // 清除即将更新的区域
+  ctx.clearRect(offset * pointSpace, 0, refreshBlockWidth, canvasHeight.value);
+  offset++;
+  ctx.lineTo(offset * pointSpace, yPos);
+  ctx.stroke();
+
+  // 重置偏移量
   if (offset > maxOffset) {
-    offset = 2
-    ctx.beginPath()
+    offset = 2;
+    ctx.beginPath();
   }
 }
 document.body.onresize = function () {
@@ -93,7 +105,7 @@ onMounted(() => {
       const num = i >= ECGData.length ? 0 : Number(ECGData[i])
       drawEKGPoint(ECGCtx, num)
       i++
-    }, 30)
+    }, 0)
   })
 })
 </script>
