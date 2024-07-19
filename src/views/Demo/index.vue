@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import {onMounted, ref} from 'vue'
+import axios from 'axios';
+
 
 import BodyScore from './BodyScore.vue'
 import EKGChart from './EKGChart.vue'
@@ -77,7 +79,37 @@ const data = ref({
     bodyHeat: 40,
     bloodOxygen: 100,
   },
-})
+  ecgChart:{
+    ecgData: [] as any[]  // 添加用于存放ECG图像的队列
+  }
+});
+
+
+async function getEcgData() {
+  try {
+    const response = await axios.get('http://localhost:5000/get_ecg_data');
+    // 假设返回的数据是数组
+    return response.data;
+  } catch (error) {
+    // console.error('Error fetching data:', error);
+    return [];
+  }
+}
+
+// 需要在组件范围内声明intervalId
+// @ts-ignore
+let intervalId = null;
+
+onMounted(() => {
+  intervalId = setInterval(async () => {
+    const newData = await getEcgData();
+    // console.log(newData);
+    data.value.ecgChart.ecgData.push(...newData);
+    console.log(newData)
+    // console.log(data.value.ecgChart.ecgData)
+  }, 500); // 每2000毫秒（2秒）执行一次
+});
+
 </script>
 
 <template>
@@ -96,7 +128,7 @@ const data = ref({
       <div class="bottom-wrapper">
         <div class="left">
           <BodyScore class="body-score" :data="data.bodyScore"></BodyScore>
-          <EKGChart class="ekg-chart"></EKGChart>
+          <EKGChart class="ekg-chart" :data="data.ecgChart"></EKGChart>
           <BodyData class="body-data" :data="data.bodyData"></BodyData>
         </div>
         <div class="middle"></div>

@@ -1,12 +1,19 @@
 <script setup lang="ts">
-import { nextTick, onMounted, ref } from 'vue'
-import ECGData from '../../assets/ECG-data.json'
+import {defineProps, nextTick, onMounted, ref} from 'vue'
+
 
 const canvasRoot = ref<HTMLElement>()
 const gridCanvas = ref<HTMLCanvasElement>()
 const EKGCanvas = ref<HTMLCanvasElement>()
 const canvasWidth = ref(0)
 const canvasHeight = ref(0)
+
+const props = defineProps<{
+  data: {
+    ecgData: number[]
+  }
+}>();
+
 function setCanvasSize() {
   if (!canvasRoot || !canvasRoot.value) return
   const { width, height } = canvasRoot.value.getBoundingClientRect()
@@ -54,8 +61,8 @@ function drawEKGPoint(
     num: number,
     pointSpace = 2,
     refreshBlockWidth = 20,
-    minValue = -1,
-    maxValue = 2
+    minValue = 110000,
+    maxValue = 160000
 ) {
   const canvasRange = canvasHeight.value;
   const maxOffset = canvasWidth.value / pointSpace;
@@ -70,7 +77,7 @@ function drawEKGPoint(
 
   // 清除即将更新的区域
   ctx.clearRect(offset * pointSpace, 0, refreshBlockWidth, canvasHeight.value);
-  offset++;
+  offset+=4;
   ctx.lineTo(offset * pointSpace, yPos);
   ctx.stroke();
 
@@ -80,6 +87,8 @@ function drawEKGPoint(
     ctx.beginPath();
   }
 }
+
+
 document.body.onresize = function () {
   setCanvasSize()
   const gridCtx = gridCanvas!.value!.getContext('2d')
@@ -93,21 +102,22 @@ document.body.onresize = function () {
 }
 
 onMounted(() => {
-  setCanvasSize()
-  const gridCtx = gridCanvas!.value!.getContext('2d')
-  const ECGCtx = EKGCanvas!.value!.getContext('2d')
+  setCanvasSize();
+  const gridCtx = gridCanvas.value?.getContext('2d');
+  const ECGCtx = EKGCanvas.value?.getContext('2d');
 
   nextTick(() => {
-    if (!gridCtx || !ECGCtx) return
-    drawGrid(gridCtx)
-    let i = 0
+    if (!gridCtx || !ECGCtx) return;
+    drawGrid(gridCtx);
+
     setInterval(() => {
-      const num = i >= ECGData.length ? 0 : Number(ECGData[i])
-      drawEKGPoint(ECGCtx, num)
-      i++
-    }, 0)
-  })
-})
+      if (props.data.ecgData.length > 0) {
+        const num = props.data.ecgData.shift() as number; // 从数组中取出并移除第一个元素
+        drawEKGPoint(ECGCtx, num);
+      }
+    }, 50); // 调整间隔时间以适应绘制需求
+  });
+});
 </script>
 
 <template>
