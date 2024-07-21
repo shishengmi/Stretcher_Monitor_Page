@@ -85,16 +85,20 @@ const data = ref({
 });
 
 
-async function getEcgData() {
+
+async function getData() {
   try {
-    const response = await axios.get('http://localhost:5000/get_ecg_data');
-    // 假设返回的数据是数组
-    return response.data;
+    const response = await axios.get('http://localhost:5000/get_data');
+    // console.log(response.data)
+    return response.data
+
   } catch (error) {
-    // console.error('Error fetching data:', error);
+    console.error('Error fetching data:', error);
     return [];
   }
 }
+
+
 
 // 需要在组件范围内声明intervalId
 // @ts-ignore
@@ -102,11 +106,15 @@ let intervalId = null;
 
 onMounted(() => {
   intervalId = setInterval(async () => {
-    const newData = await getEcgData();
-    // console.log(newData);
+    const response = await getData();
+    if (data.value.personData.bloodOxygen > 20) {
+      data.value.personData.bloodOxygen = response.blood_oxygen;
+    }
+    data.value.personData.bodyHeat = response.body_temperature/10;
+    const newData = response.ecg_data
+
     data.value.ecgChart.ecgData.push(...newData);
-    console.log(newData)
-    // console.log(data.value.ecgChart.ecgData)
+    console.log(data.value.ecgChart.ecgData)
   }, 500); // 每2000毫秒（2秒）执行一次
 });
 
