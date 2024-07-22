@@ -111,6 +111,7 @@ onMounted(() => {
       data.value.personData.bloodOxygen = response.blood_oxygen;
     }
     data.value.personData.bodyHeat = response.body_temperature/10;
+    data.value.bodyData.heartRate.num = response.heart_rate/10;
     const newData = response.ecg_data
 
     data.value.ecgChart.ecgData.push(...newData);

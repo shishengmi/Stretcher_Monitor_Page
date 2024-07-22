@@ -69,6 +69,10 @@ function drawEKGPoint(
   ctx.strokeStyle = '#3bff72';
   ctx.lineWidth = 1;
 
+  if(num>maxValue)
+    num = maxValue;
+  if(num<minValue)
+    num = minValue;
   // 将num值从[minValue, maxValue]范围映射到[canvasHeight.value, 0]范围
   const scaledNum = ((num - minValue) / (maxValue - minValue)) * canvasRange;
 
