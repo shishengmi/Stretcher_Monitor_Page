@@ -125,7 +125,7 @@ onMounted(() => {
   <div class="demo">
     <div class="container">
       <header>
-        <h2 class="title">中国医疗可视化分析</h2>
+        <h2 class="title">担架可视化分析</h2>
         <div class="time">
           <img src="../../assets//date.png" />
           <span class="val">
