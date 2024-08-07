@@ -118,8 +118,10 @@ onMounted(() => {
       if (props.data.ecgData.length > 0) {
         const num = props.data.ecgData.shift() as number; // 从数组中取出并移除第一个元素
         drawEKGPoint(ECGCtx, num);
+      }else{
+        // console.log("empty")
       }
-    }, 50); // 调整间隔时间以适应绘制需求
+    }, 100); // 调整间隔时间以适应绘制需求
   });
 });
 </script>

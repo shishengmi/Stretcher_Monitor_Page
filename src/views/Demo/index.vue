@@ -93,7 +93,7 @@ async function getData() {
     return response.data
 
   } catch (error) {
-    console.error('Error fetching data:', error);
+    // console.error('Error fetching data:', error);
     return [];
   }
 }
@@ -116,7 +116,7 @@ onMounted(() => {
 
     data.value.ecgChart.ecgData.push(...newData);
     console.log(data.value.ecgChart.ecgData)
-  }, 500); // 每2000毫秒（2秒）执行一次
+  }, 1000); // 每2000毫秒（2秒）执行一次
 });
 
 </script>
