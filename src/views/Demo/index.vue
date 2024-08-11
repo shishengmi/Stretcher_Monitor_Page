@@ -42,15 +42,15 @@ const data = ref({
   },
   bodyData: {
     heartRate: {
-      num: 200,
+      num: 0,
       status: 'down',
     },
     hrv: {
-      num: 210,
+      num: 0,
       status: 'down',
     },
     pr: {
-      num: 230,
+      num: 0,
       status: 'up',
     },
     bodyScore: {
@@ -105,13 +105,32 @@ async function getData() {
 let intervalId = null;
 
 onMounted(() => {
+  let heartRate_hrv_process = [];
+  let differences = [];
   intervalId = setInterval(async () => {
     const response = await getData();
-    if (data.value.personData.bloodOxygen > 20) {
-      data.value.personData.bloodOxygen = response.blood_oxygen;
-    }
+
+    data.value.personData.bloodOxygen = response.blood_oxygen / 100;
     data.value.personData.bodyHeat = response.body_temperature/10;
     data.value.bodyData.heartRate.num = response.heart_rate/10;
+    heartRate_hrv_process.push(response.heart_rate / 10);
+    if (heartRate_hrv_process.length > 2) {
+      // 清空 differences 列表
+      differences = [];
+
+      // 仅计算两个数据点的差异
+      for (let i = 1; i < heartRate_hrv_process.length; i++) {
+        differences.push(heartRate_hrv_process[i] - heartRate_hrv_process[i - 1]);
+      }
+
+      // 清空 heartRate_hrv_process 列表
+      heartRate_hrv_process.length = 0;
+
+      // 计算 HRV 值
+      const sumDifferences = differences.reduce((acc, val) => acc + val, 0);
+      data.value.bodyData.hrv.num = sumDifferences / differences.length;
+    }
+    data.value.bodyData.pr.num = 1/response.heart_rate/10*1000000
     const newData = response.ecg_data
 
     data.value.ecgChart.ecgData.push(...newData);

@@ -39,7 +39,7 @@ const props = defineProps<{
           </div>
           <div class="value">
             <span class="num">{{ props.data.heartRate.num }}</span>
-            <div class="unit">ME</div>
+            <div class="unit">bpm</div>
           </div>
         </div>
       </li>
@@ -60,7 +60,7 @@ const props = defineProps<{
             </span>
           </div>
           <div class="value">
-            <span class="num">{{ props.data.hrv.num }}</span>
+            <span class="num">{{ props.data.hrv.num.toFixed(1) }}</span>
             <div class="unit">ME</div>
           </div>
         </div>
@@ -82,7 +82,7 @@ const props = defineProps<{
             </span>
           </div>
           <div class="value">
-            <span class="num">{{ props.data.pr.num }}</span>
+            <span class="num">{{ props.data.pr.num.toFixed(1) }}</span>
             <div class="unit">ME</div>
           </div>
         </div>
