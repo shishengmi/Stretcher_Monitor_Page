@@ -130,7 +130,11 @@ onMounted(() => {
       const sumDifferences = differences.reduce((acc, val) => acc + val, 0);
       data.value.bodyData.hrv.num = sumDifferences / differences.length;
     }
-    data.value.bodyData.pr.num = 1/response.heart_rate/10*1000000
+    if(response.heart_rate !== 0)
+    {
+      data.value.bodyData.pr.num = 1/response.heart_rate/10*1000000
+    }
+    else data.value.bodyData.pr.num = 0
     const newData = response.ecg_data
 
     data.value.ecgChart.ecgData.push(...newData);
