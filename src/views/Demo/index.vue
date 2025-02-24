@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {onMounted, ref} from 'vue'
 import axios from 'axios';
-
+import { calculateBodyScore } from '../../utils/bodyScoreAlgorithm';
 
 import BodyScore from './BodyScore.vue'
 import EKGChart from './EKGChart.vue'
@@ -36,7 +36,8 @@ setInterval(() => {
 
 const data = ref({
   bodyScore: {
-    score: 102.67,
+    score: 102.67,//综合指数
+
     maxBloodPressure: 102,
     minBloodPressure: 86,
   },
@@ -86,7 +87,7 @@ const data = ref({
 
 
 
-async function getData() {
+async function getData() {//从后端获取数据
   try {
     const response = await axios.get('http://localhost:5000/get_data');
     // console.log(response.data)
@@ -108,11 +109,20 @@ onMounted(() => {
   let heartRate_hrv_process = [];
   let differences = [];
   intervalId = setInterval(async () => {
-    const response = await getData();
+    const response = await getData();//从这里获取数据响应
 
     data.value.personData.bloodOxygen = response.blood_oxygen / 100;
     data.value.personData.bodyHeat = response.body_temperature/10;
     data.value.bodyData.heartRate.num = response.heart_rate/10;
+
+    data.value.bodyScore.score = calculateBodyScore(
+        response.body_temperature/10,
+        response.heart_rate/10,
+        response.blood_oxygen / 100
+    );
+
+
+
     heartRate_hrv_process.push(response.heart_rate / 10);
     if (heartRate_hrv_process.length > 2) {
       // 清空 differences 列表
