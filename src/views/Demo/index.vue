@@ -66,7 +66,7 @@ const data = ref({
   immuneNum: {
     score: 0.00,
     minBasicVal: 12.33,
-    maxBasicVal: 60.1,
+    maxBasicVal: 100.0,
   },
   personInfo: {
     name: '小明',
