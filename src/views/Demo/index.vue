@@ -36,8 +36,7 @@ setInterval(() => {
 
 const data = ref({
   bodyScore: {
-    score: 102.67,//综合指数
-
+    score: 102.67,
     maxBloodPressure: 102,
     minBloodPressure: 86,
   },
@@ -64,7 +63,7 @@ const data = ref({
     },
   },
   immuneNum: {
-    score: 10.33,
+    score: 0.00,
     minBasicVal: 12.33,
     maxBasicVal: 60.1,
   },
@@ -115,12 +114,23 @@ onMounted(() => {
     data.value.personData.bodyHeat = response.body_temperature/10;
     data.value.bodyData.heartRate.num = response.heart_rate/10;
 
-    data.value.bodyScore.score = calculateBodyScore(
-        response.body_temperature/10,
-        response.heart_rate/10,
-        response.blood_oxygen / 100
-    );
+    data.value.bodyScore.score = parseFloat(
+          calculateBodyScore(
+          response.body_temperature/10,
+          response.heart_rate/10,
+          response.blood_oxygen / 100
+      ).toFixed(2)
+    )//计算综合值并保留两位小数点
 
+    data.value.bodyScore.score = 66.20
+
+    data.value.immuneNum.score = parseFloat(
+        (
+            (data.value.personData.bloodOxygen * 50) + // 假设血氧占比 50%
+            (data.value.personData.bodyHeat * 30) +    // 假设体温占比 30%
+            (data.value.bodyData.heartRate.num * 20)   // 假设心率占比 20%
+        ).toFixed(2)
+    );//计算免疫系统综合值
 
 
     heartRate_hrv_process.push(response.heart_rate / 10);

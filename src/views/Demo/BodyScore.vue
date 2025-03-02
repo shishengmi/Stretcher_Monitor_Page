@@ -12,6 +12,15 @@ const score = computed(() => {
   return getIntDecimal(props.data.score)
 })
 
+
+// 计算分数颜色
+const scoreColor = computed(() => {
+  const value = props.data.score // 直接获取 score 数值
+  if (value < 60) return 'low'   // 低（红色）
+  if (value < 80) return 'mid'   // 偏低（黄色）
+  return 'high'                  // 正常（绿色）
+})
+
 const fullSliderNum = 200
 const maxSliderPercent = computed(() => {
   return Math.round((props.data.maxBloodPressure / fullSliderNum) * 100) + '%'
@@ -19,6 +28,7 @@ const maxSliderPercent = computed(() => {
 const minSliderPercent = computed(() => {
   return Math.round((props.data.minBloodPressure / fullSliderNum) * 100) + '%'
 })
+
 </script>
 
 <template>
@@ -26,11 +36,11 @@ const minSliderPercent = computed(() => {
     <div class="left">
       <span class="icon"></span>
       <div class="text">
-        <span class="num">
-          <span class="int">{{ score.int }}</span>
-          <span class="decimal" v-if="score.decimal">.{{ score.decimal }}</span>
-        </span>
-        <span class="des">{人体综合指数}</span>
+      <span class="num" :class="scoreColor">
+        <span class="int">{{ score.int }}</span>
+        <span class="decimal">.{{ score.decimal }}</span>
+      </span>
+              <span class="des">{人体综合指数} ({{ scoreColor }})</span>  <!-- 调试 -->
       </div>
     </div>
     <div class="right">
@@ -139,5 +149,17 @@ const minSliderPercent = computed(() => {
       }
     }
   }
+}
+
+.low {
+  color: red !important;   /* 添加 !important 强制生效 */
+}
+
+.mid {
+  color: yellow !important;
+}
+
+.high {
+  color: green !important;
 }
 </style>

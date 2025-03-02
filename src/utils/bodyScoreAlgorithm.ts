@@ -1,16 +1,14 @@
 
 const WEIGHTS = {
-    heartRate: 0.4,
-    bodyTemperature: 0.3,
-    oxygenLevel: 0.3,
+    heartRate: 0.2,
+    bodyTemperature: 0.4,
+    oxygenLevel: 0.4,
 };
 
 // 计算单项得分的函数
 const calculateScore = (value: number, min: number, max: number): number => {
     // 如果值超出正常范围，返回0
-    if (value < min || value > max) {
-        return 0;
-    }
+    value = Math.max(min, Math.min(max, value));
 
     // 将值归一化到0-100分之间
     return ((value - min) / (max - min)) * 100;
