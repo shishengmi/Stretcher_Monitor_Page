@@ -117,8 +117,8 @@ onMounted(() => {
 
     data.value.bodyScore.score = parseFloat(
         calculateHealthScore(
-          response.body_temperature/10,
           response.heart_rate/10,
+          response.body_temperature/10,
           response.blood_oxygen / 100
       ).toFixed(2)
     )//计算综合值并保留两位小数点

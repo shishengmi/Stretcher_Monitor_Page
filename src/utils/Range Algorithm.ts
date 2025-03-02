@@ -32,10 +32,16 @@ export function calculateHealthScore(heartRate: number, bodyTemperature: number,
 
     // 设定权重 (可调整)
     const W_H = 0.1, W_T = 0.3, W_S = 0.6;
+    // 打印计算过程
+    console.log(`heartRate score is ${S_H}`);
+    console.log(`bodyTemperature score is ${S_T}`);
+    console.log(`oxygenLevel score is ${S_S}`);
+    console.log(`Total Health Score: ${W_H * S_H + W_T * S_T + W_S * S_S}`);
 
     // 计算总健康评分
     return W_H * S_H + W_T * S_T + W_S * S_S;
+
 }
 
-// const score = calculateHealthScore(110, 38.0, 92);
-// console.log(`分数: ${score.toFixed(2)}`);
+const score = calculateHealthScore(82.4, 27.1, 94.4);
+console.log(`分数: ${score.toFixed(2)}`);
