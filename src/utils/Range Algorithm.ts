@@ -36,3 +36,6 @@ export function calculateHealthScore(heartRate: number, bodyTemperature: number,
     // 计算总健康评分
     return W_H * S_H + W_T * S_T + W_S * S_S;
 }
+
+// const score = calculateHealthScore(110, 38.0, 92);
+// console.log(`分数: ${score.toFixed(2)}`);
