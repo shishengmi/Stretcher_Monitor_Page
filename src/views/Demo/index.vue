@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import {onMounted, ref} from 'vue'
 import axios from 'axios';
-import { calculateBodyScore } from '../../utils/bodyScoreAlgorithm';
+// import { calculateBodyScore } from '../../utils/bodyScoreAlgorithm';
+import { calculateHealthScore } from '../../utils/Range Algorithm';
 
 import BodyScore from './BodyScore.vue'
 import EKGChart from './EKGChart.vue'
@@ -115,20 +116,19 @@ onMounted(() => {
     data.value.bodyData.heartRate.num = response.heart_rate/10;
 
     data.value.bodyScore.score = parseFloat(
-          calculateBodyScore(
+        calculateHealthScore(
           response.body_temperature/10,
           response.heart_rate/10,
           response.blood_oxygen / 100
       ).toFixed(2)
     )//计算综合值并保留两位小数点
 
-    data.value.bodyScore.score = 66.20
 
     data.value.immuneNum.score = parseFloat(
         (
-            (data.value.personData.bloodOxygen * 50) + // 假设血氧占比 50%
+            ((data.value.personData.bloodOxygen * 50) + // 假设血氧占比 50%
             (data.value.personData.bodyHeat * 30) +    // 假设体温占比 30%
-            (data.value.bodyData.heartRate.num * 20)   // 假设心率占比 20%
+            (data.value.bodyData.heartRate.num * 20))*0.01   // 假设心率占比 20%
         ).toFixed(2)
     );//计算免疫系统综合值
 

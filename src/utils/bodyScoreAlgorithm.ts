@@ -21,8 +21,8 @@ export const calculateBodyScore = (
     oxygenLevel: number
 ): number => {
     // 计算各项得分
-    const heartRateScore = calculateScore(heartRate, 60, 100);
-    const bodyTemperatureScore = calculateScore(bodyTemperature, 36.5, 37.5);
+    const heartRateScore = calculateScore(heartRate, 60, 130);
+    const bodyTemperatureScore = calculateScore(bodyTemperature, 35.5, 37.5);
     const oxygenLevelScore = calculateScore(oxygenLevel, 95, 100);
 
     // 计算加权综合分数
