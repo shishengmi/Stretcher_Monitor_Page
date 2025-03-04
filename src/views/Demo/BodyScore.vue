@@ -151,15 +151,15 @@ const minSliderPercent = computed(() => {
   }
 }
 
-.low {
+.Low {
   color: red !important;   /* 添加 !important 强制生效 */
 }
 
-.mid {
+.Mid {
   color: yellow !important;
 }
 
-.high {
+.High {
   color: green !important;
 }
 </style>
