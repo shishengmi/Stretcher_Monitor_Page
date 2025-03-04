@@ -16,9 +16,9 @@ const score = computed(() => {
 // 计算分数颜色
 const scoreColor = computed(() => {
   const value = props.data.score // 直接获取 score 数值
-  if (value < 60) return 'low'   // 低（红色）
-  if (value < 80) return 'mid'   // 偏低（黄色）
-  return 'high'                  // 正常（绿色）
+  if (value < 60) return 'Low'   // 低（红色）
+  if (value < 80) return 'Mid'   // 偏低（黄色）
+  return 'High'                  // 正常（绿色）
 })
 
 const fullSliderNum = 200
